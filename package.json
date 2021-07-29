@@ -21,7 +21,7 @@
     "/dist"
   ],
   "repository": "github:corets/input-helpers",
-  "homepage": "https://corets.github.io/input-helpers",
+  "homepage": "https://docs.corets.io/helpers/input-helpers",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
