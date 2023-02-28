@@ -1,8 +1,8 @@
 import { SelectFilesOfType } from "./types"
 
-export const selectFilesOfType: SelectFilesOfType = async (accept) => {
+export const selectFilesOfType: SelectFilesOfType = async (accept, single) => {
   return new Promise((resolve) => {
-    const handleChange = (e) => {
+    const handleChange = (e: Event) => {
       el.removeEventListener("change", handleChange)
       document.body.removeChild(el)
 
@@ -25,6 +25,8 @@ export const selectFilesOfType: SelectFilesOfType = async (accept) => {
     if (accept) {
       el.accept = accept
     }
+
+    el.multiple = single ? false : true
 
     el.addEventListener("change", handleChange)
     document.body.appendChild(el)
