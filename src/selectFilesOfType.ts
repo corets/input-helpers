@@ -2,15 +2,26 @@ import { SelectFilesOfType } from "./types"
 
 export const selectFilesOfType: SelectFilesOfType = async (accept, single) => {
   return new Promise((resolve) => {
-    const handleChange = (e: Event) => {
-      el.removeEventListener("change", handleChange)
-      document.body.removeChild(el)
+    let result: File[] | undefined = undefined
 
+    const handleFocus = () => {
+      // detect "cancel" to resolve promise accordingly
+      // focus event triggers prior to change event,
+      // browsers seem to take ~250ms to trigger the change event
+      setTimeout(() => {
+        el.removeEventListener("change", handleChange)
+        document.body.removeChild(el)
+        window.removeEventListener("focus", handleFocus)
+
+        resolve(result)
+      }, 500)
+    }
+
+    const handleChange = (e: Event) => {
       const target = e.target as HTMLInputElement
       const files = target.files
-      const result = files?.length ? Array.from(files) : undefined
 
-      resolve(result)
+      result = files?.length ? Array.from(files) : undefined
     }
 
     const el = document.createElement("input")
@@ -28,6 +39,7 @@ export const selectFilesOfType: SelectFilesOfType = async (accept, single) => {
 
     el.multiple = single ? false : true
 
+    window.addEventListener("focus", handleFocus)
     el.addEventListener("change", handleChange)
     document.body.appendChild(el)
     el.click()
